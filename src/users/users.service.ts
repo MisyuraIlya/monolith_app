@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
-import { Model } from 'mongoose';
+import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -20,16 +20,20 @@ export class UsersService {
     }).save();
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return this.userModel.find({})
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(query: FilterQuery<User>) {
+    const user = (await this.userModel.findOne(query)).toObject();
+    if(!user){
+      throw new NotFoundException("user not found")
+    }
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(query: FilterQuery<User>, data: UpdateQuery<User>) {
+    return this.userModel.findOneAndUpdate(query,data);
   }
 
   remove(id: number) {

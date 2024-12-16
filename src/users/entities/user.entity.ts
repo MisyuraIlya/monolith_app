@@ -11,6 +11,9 @@ export class User {
     email: string
 
     @Prop()
+    refreshToken?: string
+
+    @Prop()
     password: string
 }
 
