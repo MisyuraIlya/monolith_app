@@ -1,8 +1,8 @@
 global:
-  scrape_interval: 15s # Adjust scrape frequency as needed
+  scrape_interval: 15s 
 
 scrape_configs:
   - job_name: 'nestjs-app'
     metrics_path: '/metrics'
     static_configs:
-      - targets: ['app:4000'] # Replace with your NestJS container name and metrics endpoint
+      - targets: ['app:4000'] 
