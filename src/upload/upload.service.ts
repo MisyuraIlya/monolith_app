@@ -31,17 +31,17 @@ export class UploadService {
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
-    const fileName = `${Date.now()}-${file.originalname}`; 
+    const fileName = `${Date.now()}-${file.originalname}`.replace(/"/g, ''); 
     const params: AWS.S3.PutObjectRequest = {
       Bucket: `${process.env.MINIO_BUCKET_NAME}`,
       Key: fileName,
-      Body: file.buffer, 
-      ContentType: file.mimetype, 
+      Body: file.buffer,
+      ContentType: file.mimetype,
     };
-
+  
     try {
       await this.s3.putObject(params).promise();
-      return fileName; 
+      return fileName;
     } catch (err) {
       console.error('Error uploading file:', err);
       throw new InternalServerErrorException('Failed to upload file');
