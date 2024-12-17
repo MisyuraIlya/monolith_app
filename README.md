@@ -13,3 +13,7 @@ npm i --save-dev @types/cookie-parser
 npm i --save @nestjs/throttler
 
 
+<!-- CACHE MODULE -->
+npm install @nestjs/cache-manager cache-manager
+npm i --save-dev @types/cache-manager
+npm i cache-manager-redis-store
