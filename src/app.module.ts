@@ -12,11 +12,15 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ProductsModule } from './products/products.module';
-
+import {PrometheusModule} from '@willsoto/nestjs-prometheus'
+import { LoggingInterceptor } from './logging.interceptor';
 @Module({
   imports: [
+
+    // ENV
     ConfigModule.forRoot({ isGlobal: true }),
 
+    // MONGO
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         uri: configService.getOrThrow('MONGODB_URI'),
@@ -24,6 +28,7 @@ import { ProductsModule } from './products/products.module';
       inject: [ConfigService],
     }),
 
+    // CACHE
     // CacheModule.registerAsync({
     //   imports: [ConfigModule], 
     //   inject: [ConfigService], 
@@ -41,6 +46,7 @@ import { ProductsModule } from './products/products.module';
     //   },
     // }),
 
+    // THROLLTER
     // ThrottlerModule.forRootAsync({
     //   imports: [ConfigModule],
     //   inject: [ConfigService],
@@ -52,12 +58,17 @@ import { ProductsModule } from './products/products.module';
     //   ],
     // }),
 
+    // GRAPHQL
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
       driver: ApolloDriver,
       context: ({ req }) => ({ req })
     }),
 
+    //PrometheusModule
+    PrometheusModule.register(),
+
+    // COMMON
     UsersModule,
     AuthModule,
     ProductsModule,
@@ -73,7 +84,11 @@ import { ProductsModule } from './products/products.module';
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: CacheInterceptor
-    // }
+    // },
+    {
+      provide:APP_INTERCEPTOR,
+      useClass: LoggingInterceptor
+    }
   ],
 })
 export class AppModule {}
