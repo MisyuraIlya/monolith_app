@@ -5,6 +5,8 @@ import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
 import { GetProductArgs } from './dto/args/get-product.args';
 import { GetProductsArgs } from './dto/args/get-products.args';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -17,6 +19,7 @@ export class ProductsResolver {
   }
 
   // Fetch all products with filters, pagination, and sorting
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Product], { name: 'products' })
   findAll(@Args() getProductsArgs: GetProductsArgs) {
     return this.productsService.findAll(getProductsArgs);
@@ -35,7 +38,7 @@ export class ProductsResolver {
   ) {
     return this.productsService.update(id, updateProductInput);
   }
-  
+
   // Remove a product
   @Mutation(() => Boolean, { name: 'removeProduct' })
   removeProduct(@Args('id', { type: () => String }) id: string) {
