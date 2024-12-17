@@ -9,6 +9,9 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheInterceptor, CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -21,49 +24,56 @@ import { redisStore } from 'cache-manager-redis-yet';
       inject: [ConfigService],
     }),
 
-    CacheModule.registerAsync({
-      imports: [ConfigModule], 
-      inject: [ConfigService], 
-      useFactory: async (configService: ConfigService) => {
-        const store = await redisStore({
-          socket: {
-            host: configService.getOrThrow('REDIS_URI'),
-            port: configService.getOrThrow('REDIS_PORT'),
-          },
-        });
-        return {
-          store: store as unknown as CacheStore,
-          ttl: 3 * 60000, // 3 minutes (milliseconds)
-        };
-      },
-    }),
+    // CacheModule.registerAsync({
+    //   imports: [ConfigModule], 
+    //   inject: [ConfigService], 
+    //   useFactory: async (configService: ConfigService) => {
+    //     const store = await redisStore({
+    //       socket: {
+    //         host: configService.getOrThrow('REDIS_URI'),
+    //         port: configService.getOrThrow('REDIS_PORT'),
+    //       },
+    //     });
+    //     return {
+    //       store: store as unknown as CacheStore,
+    //       ttl: 3 * 60000, // 3 minutes (milliseconds)
+    //     };
+    //   },
+    // }),
 
-    ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => [
-        {
-          ttl: config.get('THROTTLE_TTL'),
-          limit: config.get('THROTTLE_LIMIT'),
-        },
-      ],
+    // ThrottlerModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => [
+    //     {
+    //       ttl: config.get('THROTTLE_TTL'),
+    //       limit: config.get('THROTTLE_LIMIT'),
+    //     },
+    //   ],
+    // }),
+
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      autoSchemaFile: true,
+      driver: ApolloDriver,
+      context: ({ req }) => ({ req })
     }),
 
     UsersModule,
     AuthModule,
+    ProductsModule,
 
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor
-    }
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CacheInterceptor
+    // }
   ],
 })
 export class AppModule {}

@@ -1,4 +1,10 @@
-<!-- AUTH -->
+# Installation Guide
+
+This guide explains the required packages for Authentication, Throttling, Caching, and GraphQL in a **NestJS** project.
+
+## 🔐 Authentication
+
+```bash
 npm i @nestjs/mongoose mongoose @nestjs/config
 npm i class-validator class-transformer
 npm i bcryptjs
@@ -8,12 +14,36 @@ npm i @nestjs/passport passport passport-local passport-jwt @nestjs/jwt
 npm i --save-dev @types/passport-jwt @types/passport-local
 npm i cookie-parser
 npm i --save-dev @types/cookie-parser
+```
 
-<!-- THROTTLER -->
+## 🚦 Throttler Module
+
+Install throttling to protect the API from excessive requests:
+
+```bash
 npm i --save @nestjs/throttler
+```
 
+## 🗄️ Cache Module
 
-<!-- CACHE MODULE -->
+Install caching with Redis integration:
+
+```bash
 npm install @nestjs/cache-manager cache-manager
 npm i --save-dev @types/cache-manager
 npm i cache-manager-redis-store
+```
+
+## 🚀 GraphQL Support
+
+Set up GraphQL with Apollo Server:
+
+```bash
+npm i @nestjs/graphql @nestjs/apollo @apollo/server graphql
+```
+```
+
+### How to Use:
+Copy and paste this markdown block into your **README.md** file to guide developers in setting up required dependencies.
+
+CANT USE GRAPHQL WITH CacheModule AND ThrottlerGuard
