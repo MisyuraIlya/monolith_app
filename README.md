@@ -43,10 +43,19 @@ npm i @nestjs/graphql @nestjs/apollo @apollo/server graphql
 ```
 ```
 
-## 🗄️ Metrix  Prometheus & Grafana
+## Metrix  Prometheus & Grafana
 
 ```bash
 npm install @willsoto/nestjs-prometheus prom-client
+```
+```
+
+## Upload MinIO/S3
+
+```bash
+npm i --save-dev @types/multer
+npm install @nestjs/platform-express @nestjs/common minio
+npm i aws-sdk
 ```
 ```
 

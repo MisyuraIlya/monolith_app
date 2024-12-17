@@ -14,6 +14,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ProductsModule } from './products/products.module';
 import {PrometheusModule} from '@willsoto/nestjs-prometheus'
 import { LoggingInterceptor } from './logging.interceptor';
+import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
 
@@ -29,41 +30,41 @@ import { LoggingInterceptor } from './logging.interceptor';
     }),
 
     // CACHE
-    // CacheModule.registerAsync({
-    //   imports: [ConfigModule], 
-    //   inject: [ConfigService], 
-    //   useFactory: async (configService: ConfigService) => {
-    //     const store = await redisStore({
-    //       socket: {
-    //         host: configService.getOrThrow('REDIS_URI'),
-    //         port: configService.getOrThrow('REDIS_PORT'),
-    //       },
-    //     });
-    //     return {
-    //       store: store as unknown as CacheStore,
-    //       ttl: 3 * 60000, // 3 minutes (milliseconds)
-    //     };
-    //   },
-    // }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule], 
+      inject: [ConfigService], 
+      useFactory: async (configService: ConfigService) => {
+        const store = await redisStore({
+          socket: {
+            host: configService.getOrThrow('REDIS_URI'),
+            port: configService.getOrThrow('REDIS_PORT'),
+          },
+        });
+        return {
+          store: store as unknown as CacheStore,
+          ttl: 3 * 60000, // 3 minutes (milliseconds)
+        };
+      },
+    }),
 
     // THROLLTER
-    // ThrottlerModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: (config: ConfigService) => [
-    //     {
-    //       ttl: config.get('THROTTLE_TTL'),
-    //       limit: config.get('THROTTLE_LIMIT'),
-    //     },
-    //   ],
-    // }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          ttl: config.get('THROTTLE_TTL'),
+          limit: config.get('THROTTLE_LIMIT'),
+        },
+      ],
+    }),
 
     // GRAPHQL
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      autoSchemaFile: true,
-      driver: ApolloDriver,
-      context: ({ req }) => ({ req })
-    }),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   autoSchemaFile: true,
+    //   driver: ApolloDriver,
+    //   context: ({ req }) => ({ req })
+    // }),
 
     //PrometheusModule
     PrometheusModule.register(),
@@ -72,19 +73,20 @@ import { LoggingInterceptor } from './logging.interceptor';
     UsersModule,
     AuthModule,
     ProductsModule,
+    UploadModule,
 
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ThrottlerGuard
-    // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: CacheInterceptor
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor
+    },
     {
       provide:APP_INTERCEPTOR,
       useClass: LoggingInterceptor
