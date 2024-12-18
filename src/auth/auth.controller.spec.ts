@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
-test('placeholder', () => {
+test('placeholderr', () => {
   expect(true).toBe(true);
 });
 // describe('AuthController', () => {
