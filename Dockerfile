@@ -22,8 +22,9 @@ FROM node:current-alpine AS build
 
 WORKDIR /app
 
+# Copy package files and install all dependencies (including devDependencies)
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install
 
 # Copy source files and build the application
 COPY . .
