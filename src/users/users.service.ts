@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-  ){}
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -21,19 +21,19 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.userModel.find({})
+    return this.userModel.find({});
   }
 
   async findOne(query: FilterQuery<User>) {
     const user = (await this.userModel.findOne(query)).toObject();
-    if(!user){
-      throw new NotFoundException("user not found")
+    if (!user) {
+      throw new NotFoundException('user not found');
     }
     return user;
   }
 
   update(query: FilterQuery<User>, data: UpdateQuery<User>) {
-    return this.userModel.findOneAndUpdate(query,data);
+    return this.userModel.findOneAndUpdate(query, data);
   }
 
   remove(id: number) {

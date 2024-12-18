@@ -8,10 +8,10 @@ import { Product, ProductSchema } from './entities/product.entity';
   imports: [
     MongooseModule.forFeature([
       {
-        name:Product.name,
-        schema: ProductSchema
-      }
-    ])
+        name: Product.name,
+        schema: ProductSchema,
+      },
+    ]),
   ],
   providers: [ProductsResolver, ProductsService],
 })

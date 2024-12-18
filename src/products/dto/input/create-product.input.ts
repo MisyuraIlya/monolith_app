@@ -3,7 +3,6 @@ import { IsNotEmpty } from 'class-validator';
 
 @InputType()
 export class CreateProductInput {
-
   @Field()
   title: string;
 
@@ -18,6 +17,4 @@ export class CreateProductInput {
 
   @Field({ nullable: true })
   isPublished?: boolean;
-
-
 }

@@ -10,7 +10,7 @@ import { GetProductsArgs } from './dto/args/get-products.args';
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private readonly productModel: Model<Product>,
-  ){}
+  ) {}
 
   async create(createProductInput: CreateProductInput): Promise<Product> {
     const newProduct = new this.productModel(createProductInput);
@@ -18,8 +18,19 @@ export class ProductsService {
   }
 
   async findAll(args: GetProductsArgs): Promise<Product[]> {
-    const { id, title, sku, isPublished, minPrice, maxPrice, page, limit, sortBy, order } = args;
-  
+    const {
+      id,
+      title,
+      sku,
+      isPublished,
+      minPrice,
+      maxPrice,
+      page,
+      limit,
+      sortBy,
+      order,
+    } = args;
+
     const filter: any = {};
     if (id) filter._id = { $in: id };
     if (title) filter.title = { $regex: title, $options: 'i' };
@@ -30,7 +41,7 @@ export class ProductsService {
       if (minPrice !== undefined) filter.price.$gte = minPrice;
       if (maxPrice !== undefined) filter.price.$lte = maxPrice;
     }
-  
+
     const sort: Record<string, 1 | -1> = {};
 
     if (sortBy) {
@@ -38,7 +49,7 @@ export class ProductsService {
     } else {
       sort['createdAt'] = -1; // Default sort
     }
-  
+
     return this.productModel
       .find(filter)
       .sort(sort)
@@ -55,7 +66,10 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: string, updateProductInput: UpdateProductInput): Promise<Product> {
+  async update(
+    id: string,
+    updateProductInput: UpdateProductInput,
+  ): Promise<Product> {
     const updatedProduct = await this.productModel
       .findByIdAndUpdate(id, updateProductInput, { new: true })
       .exec();

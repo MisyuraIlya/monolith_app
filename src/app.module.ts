@@ -7,17 +7,20 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { CacheInterceptor, CacheModule, CacheStore } from '@nestjs/cache-manager';
+import {
+  CacheInterceptor,
+  CacheModule,
+  CacheStore,
+} from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ProductsModule } from './products/products.module';
-import {PrometheusModule} from '@willsoto/nestjs-prometheus'
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggingInterceptor } from './logging.interceptor';
 import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
-
     // ENV
     ConfigModule.forRoot({ isGlobal: true }),
 
@@ -31,8 +34,8 @@ import { UploadModule } from './upload/upload.module';
 
     // CACHE
     CacheModule.registerAsync({
-      imports: [ConfigModule], 
-      inject: [ConfigService], 
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const store = await redisStore({
           socket: {
@@ -74,23 +77,22 @@ import { UploadModule } from './upload/upload.module';
     AuthModule,
     ProductsModule,
     UploadModule,
-
   ],
   controllers: [AppController],
   providers: [
     AppService,
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard
+      useClass: ThrottlerGuard,
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor
+      useClass: CacheInterceptor,
     },
     {
-      provide:APP_INTERCEPTOR,
-      useClass: LoggingInterceptor
-    }
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule {}

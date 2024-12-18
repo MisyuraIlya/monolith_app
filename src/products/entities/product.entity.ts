@@ -7,8 +7,8 @@ export type ProductDocument = Product & Document;
 @ObjectType() // Add this decorator
 @Schema({ timestamps: true })
 export class Product {
-  @Prop({type:SchemaTypes.ObjectId, auto:true})
-  @Field(() => ID) 
+  @Prop({ type: SchemaTypes.ObjectId, auto: true })
+  @Field(() => ID)
   _id: Types.ObjectId;
 
   @Field()

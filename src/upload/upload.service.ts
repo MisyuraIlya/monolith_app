@@ -20,10 +20,14 @@ export class UploadService {
 
   private async ensureBucketExists() {
     try {
-      await this.s3.headBucket({ Bucket: `${process.env.MINIO_BUCKET_NAME}` }).promise();
+      await this.s3
+        .headBucket({ Bucket: `${process.env.MINIO_BUCKET_NAME}` })
+        .promise();
     } catch (err) {
       if (err.code === 'NotFound') {
-        await this.s3.createBucket({ Bucket:`${process.env.MINIO_BUCKET_NAME}`}).promise();
+        await this.s3
+          .createBucket({ Bucket: `${process.env.MINIO_BUCKET_NAME}` })
+          .promise();
       } else {
         throw err;
       }
@@ -31,14 +35,14 @@ export class UploadService {
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
-    const fileName = `${Date.now()}-${file.originalname}`.replace(/"/g, ''); 
+    const fileName = `${Date.now()}-${file.originalname}`.replace(/"/g, '');
     const params: AWS.S3.PutObjectRequest = {
       Bucket: `${process.env.MINIO_BUCKET_NAME}`,
       Key: fileName,
       Body: file.buffer,
       ContentType: file.mimetype,
     };
-  
+
     try {
       await this.s3.putObject(params).promise();
       return fileName;

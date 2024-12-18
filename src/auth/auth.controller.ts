@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
@@ -16,9 +26,9 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   async login(
     @CurrentUser() user: User,
-    @Res({passthrough: true}) response: Response,
-  ){
-    await this.authService.login(user,response)
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    await this.authService.login(user, response);
   }
 
   @Post('refresh')
@@ -29,5 +39,4 @@ export class AuthController {
   ) {
     await this.authService.login(user, response);
   }
-
 }
