@@ -29,7 +29,9 @@ services:
 
   # NestJS Application Service
   app:
-    build: . # Ensure you have a Dockerfile in the root
+    build:
+      context: .  # Ensure you have a Dockerfile in the root
+      target: development  # Use the development stage from the Dockerfile
     environment:
       - MONGODB_URI=mongodb://mongo:27017/monolith-app
       - REDIS_URI=redis
@@ -46,8 +48,12 @@ services:
       - mongo
       - redis
       - minio
+    volumes:
+      - .:/app  # Mount your codebase into the container
+      - /app/node_modules  # Avoid mounting node_modules (use container's)
+    command: npm run start:dev  # Enable hot-reloading
     ports:
-      - '4000:4000'
+      - '4000:3000'  # Map port 4000 on localhost to port 3000 in the container
 
   # Prometheus Service
   prometheus:
