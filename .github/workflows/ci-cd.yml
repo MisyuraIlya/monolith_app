@@ -53,8 +53,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/misyurailya/monolith_app/monolith:latest
-            ghcr.io/misyurailya/monolith_app/monolith:${{ github.sha }}
+            docker.io/${{ secrets.DOCKER_USERNAME }}/monolith-app:latest
+            docker.io/${{ secrets.DOCKER_USERNAME }}/monolith-app:${{ github.sha }}
 
   deploy:
     name: Deploy to Production
