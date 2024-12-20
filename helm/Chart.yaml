@@ -1,0 +1,16 @@
+apiVersion: v2
+name: monolith-app
+version: 1.0.0
+description: Helm chart for the monolith application
+
+sources:
+  - https://github.com/your-repo/monolith-app
+
+dependencies:
+  - name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.1.21
+    alias: mongo
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 17.3.12

@@ -1,0 +1,80 @@
+mongo:
+  auth:
+    enabled: false
+  architecture: standalone
+  service:
+    port: 27017
+
+redis:
+  architecture: standalone
+  service:
+    port: 6379
+
+minio:
+  image:
+    repository: minio/minio
+    tag: latest
+  service:
+    ports:
+      - 9000
+      - 9001
+  accessKey: admin
+  secretKey: password123
+  buckets:
+    - name: uploads
+      policy: none
+      purge: false
+  resources: {}
+
+grafana:
+  image:
+    repository: grafana/grafana
+    tag: latest
+  admin:
+    user: admin
+    password: admin
+  service:
+    port: 3000
+
+prometheus:
+  image:
+    repository: prom/prometheus
+    tag: latest
+  service:
+    port: 9090
+  config:
+    scrape_configs:
+      - job_name: 'app'
+        static_configs:
+          - targets: ['app:3000']
+
+app:
+  image:
+    repository: spetsar/monolith-app
+    tag: latest
+  replicaCount: 1
+  service:
+    port: 3000
+  environment:
+    - name: MONGODB_URI
+      value: "mongodb://mongo:27017/monolith-app"
+    - name: REDIS_URI
+      value: "redis"
+    - name: REDIS_PORT
+      value: "6379"
+    - name: JWT_ACCESS_TOKEN_SECRET
+      value: "access$"
+    - name: JWT_REFRESH_TOKEN_SECRET
+      value: "refresh$"
+    - name: THROTTLE_TTL
+      value: "60"
+    - name: THROTTLE_LIMIT
+      value: "30"
+    - name: MINIO_ENDPOINT
+      value: "http://minio:9000"
+    - name: MINIO_ACCESS_KEY
+      value: "admin"
+    - name: MINIO_SECRET_KEY
+      value: "password123"
+    - name: MINIO_BUCKET
+      value: "uploads"
