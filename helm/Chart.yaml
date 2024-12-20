@@ -4,7 +4,7 @@ version: 1.0.0
 description: Helm chart for the monolith application
 
 sources:
-  - https://github.com/your-repo/monolith-app
+  - https://github.com/MisyuraIlya/monolith_app.git
 
 dependencies:
   - name: mongodb
