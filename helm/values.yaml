@@ -18,8 +18,10 @@ minio:
     ports:
       - 9000
       - 9001
-  accessKey: admin
-  secretKey: password123
+  secret:
+    name: minio-secret               # Kubernetes Secret name
+    accessKey: MINIO_ACCESS_KEY      # Key in the secret for the access key
+    secretKey: MINIO_SECRET_KEY      # Key in the secret for the secret key
   buckets:
     - name: uploads
       policy: none
@@ -73,8 +75,14 @@ app:
     - name: MINIO_ENDPOINT
       value: "http://minio.monolith:9000"
     - name: MINIO_ACCESS_KEY
-      value: "admin"
+      valueFrom:
+        secretKeyRef:
+          name: minio-secret
+          key: MINIO_ACCESS_KEY
     - name: MINIO_SECRET_KEY
-      value: "password123"
+      valueFrom:
+        secretKeyRef:
+          name: minio-secret
+          key: MINIO_SECRET_KEY
     - name: MINIO_BUCKET
       value: "uploads"
