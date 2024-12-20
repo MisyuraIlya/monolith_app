@@ -24,13 +24,19 @@ jobs:
           node-version: 'current'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          cd app
+          npm install
 
       - name: Run Linter
-        run: npm run lint
+        run: |
+          cd app
+          npm run lint
 
       - name: Run Tests
-        run: npm run test
+        run: |
+          cd app
+          npm run test
 
   build-and-push:
     name: Build and Push Docker Image
@@ -52,7 +58,7 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: app  
           push: true
           tags: |
             docker.io/${{ secrets.DOCKER_USERNAME }}/monolith-app:latest
