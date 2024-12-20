@@ -71,7 +71,7 @@ app:
     - name: THROTTLE_LIMIT
       value: "30"
     - name: MINIO_ENDPOINT
-      value: "http://minio:9000"
+      value: "http://minio.monolith:9000"
     - name: MINIO_ACCESS_KEY
       value: "admin"
     - name: MINIO_SECRET_KEY
