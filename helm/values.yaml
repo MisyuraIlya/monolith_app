@@ -1,3 +1,20 @@
+apiVersion: v2
+name: monolith-app
+version: 1.0.0
+description: Helm chart for the monolith application
+
+sources:
+  - https://github.com/MisyuraIlya/monolith_app.git
+
+dependencies:
+  - name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.1.21
+    alias: mongo
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 17.3.12
+
 mongo:
   auth:
     enabled: false
@@ -73,7 +90,7 @@ app:
     - name: THROTTLE_LIMIT
       value: "30"
     - name: MINIO_ENDPOINT
-      value: "http://minio.monolith:9000"
+      value: "http://minio:9000"
     - name: MINIO_ACCESS_KEY
       valueFrom:
         secretKeyRef:
@@ -86,3 +103,36 @@ app:
           key: MINIO_SECRET_KEY
     - name: MINIO_BUCKET
       value: "uploads"
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  hosts:
+    - host: grafana.app.local
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grafana
+              port:
+                number: 3000
+    - host: minio.app.local
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: minio
+              port:
+                number: 9001
+    - host: app.local
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: app
+              port:
+                number: 3000
