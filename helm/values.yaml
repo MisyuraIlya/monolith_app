@@ -19,9 +19,9 @@ minio:
       - 9000
       - 9001
   secret:
-    name: minio-secret               # Kubernetes Secret name
-    accessKey: MINIO_ACCESS_KEY      # Key in the secret for the access key
-    secretKey: MINIO_SECRET_KEY      # Key in the secret for the secret key
+    name: minio-secret               
+    accessKey: MINIO_ACCESS_KEY      
+    secretKey: MINIO_SECRET_KEY      
   buckets:
     - name: uploads
       policy: none
