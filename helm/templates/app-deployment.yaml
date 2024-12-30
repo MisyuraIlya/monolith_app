@@ -17,8 +17,14 @@ spec:
         image: {{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}
         env:
         {{- range .Values.app.environment }}
+        {{- if .value }}
         - name: {{ .name }}
           value: {{ .value | quote }}
+        {{- else if .valueFrom }}
+        - name: {{ .name }}
+          valueFrom:
+{{ toYaml .valueFrom | indent 12 }}
+        {{- end }}
         {{- end }}
         ports:
         - containerPort: {{ .Values.app.service.port }}

@@ -5,9 +5,6 @@ import * as AWS from 'aws-sdk';
 export class UploadService {
   private readonly s3: AWS.S3;
   constructor() {
-    console.log('e',process.env.MINIO_ENDPOINT)
-    console.log('a',process.env.MINIO_ACCESS_KEY_ID || 'adminuser') 
-    console.log('s',process.env.MINIO_SECRET_ACCESS_KEY || 'supersecretpassword' )
     this.s3 = new AWS.S3({
       endpoint: `${process.env.MINIO_ENDPOINT}`,
       accessKeyId: `${process.env.MINIO_ACCESS_KEY_ID || 'adminuser'}`,
