@@ -16,8 +16,8 @@ async function bootstrap() {
   console.log('REDIS_PORT',process.env.REDIS_PORT)
   console.log('MINIO_ENDPOINT',process.env.MINIO_ENDPOINT) 
   console.log('MINIO_PORT',process.env.MINIO_PORT)
-  console.log('MINIO_ACCESS_KEY_ID',process.env.MINIO_ACCESS_KEY_ID) 
-  console.log('MINIO_SECRET_ACCESS_KEY',process.env.MINIO_SECRET_ACCESS_KEY)
+  console.log('MINIO_ACCESS_KEY',process.env.MINIO_ACCESS_KEY) 
+  console.log('MINIO_SECRET_KEY',process.env.MINIO_SECRET_KEY)
   console.log('MINIO_BUCKET_NAME',process.env.MINIO_BUCKET_NAME)
 
   const app = await NestFactory.create(AppModule);

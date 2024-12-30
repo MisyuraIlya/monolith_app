@@ -7,8 +7,8 @@ export class UploadService {
   constructor() {
     this.s3 = new AWS.S3({
       endpoint: `${process.env.MINIO_ENDPOINT}`,
-      accessKeyId: `${process.env.MINIO_ACCESS_KEY_ID || 'adminuser'}`,
-      secretAccessKey: `${process.env.MINIO_SECRET_ACCESS_KEY || 'supersecretpassword'}`,
+      accessKeyId: `${process.env.MINIO_ACCESS_KEY || 'adminuser'}`,
+      secretAccessKey: `${process.env.MINIO_SECRET_KEY || 'supersecretpassword'}`,
       s3ForcePathStyle: true,
       signatureVersion: 'v4',
     });
