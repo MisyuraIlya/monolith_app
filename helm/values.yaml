@@ -77,18 +77,22 @@ app:
   environment:
     - name: MONGODB_URI
       value: "mongodb://mongo:27017/monolith-app"
-    - name: REDIS_URI
-      value: "redis"
-    - name: REDIS_PORT
-      value: "6379"
     - name: JWT_ACCESS_TOKEN_SECRET
       value: "access$"
+    - name: JWT_ACCESS_TOKEN_EXPIRATION_MS
+      value: "3600000"
     - name: JWT_REFRESH_TOKEN_SECRET
       value: "refresh$"
+    - name: JWT_REFRESH_TOKEN_EXPIRATION_MS
+      value: "604800000"
     - name: THROTTLE_TTL
       value: "60"
     - name: THROTTLE_LIMIT
       value: "30"
+    - name: REDIS_URI
+      value: "redis"
+    - name: REDIS_PORT
+      value: "6379"
     - name: MINIO_ENDPOINT
       value: "http://minio:9000"
     - name: MINIO_ACCESS_KEY
