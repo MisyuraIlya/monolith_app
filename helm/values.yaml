@@ -63,9 +63,11 @@ prometheus:
     port: 9090
   config:
     scrape_configs:
-      - job_name: 'app'
+      - job_name: 'app-metrics'
+        scrape_interval: 15s 
         static_configs:
-          - targets: ['app:3000']
+          - targets:
+              - 'app:3000' 
 
 app:
   image:

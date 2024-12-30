@@ -81,14 +81,14 @@ import { UploadModule } from './upload/upload.module';
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CacheInterceptor,
+    // },
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
