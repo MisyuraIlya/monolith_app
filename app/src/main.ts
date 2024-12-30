@@ -18,7 +18,7 @@ async function bootstrap() {
   console.log('MINIO_PORT',process.env.MINIO_PORT)
   console.log('MINIO_ACCESS_KEY',process.env.MINIO_ACCESS_KEY) 
   console.log('MINIO_SECRET_KEY',process.env.MINIO_SECRET_KEY)
-  console.log('MINIO_BUCKET_NAME',process.env.MINIO_BUCKET_NAME)
+  console.log('MINIO_BUCKET',process.env.MINIO_BUCKET)
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
