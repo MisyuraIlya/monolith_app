@@ -15,7 +15,7 @@ spec:
   triggers:
     - type: prometheus
       metadata:
-        serverAddress: http://prometheus:9090
+        serverAddress: http://10.107.20.218:9090
         metricName: cpu_usage
         query: irate(process_cpu_system_seconds_total{instance=~"app:3000"}[2m]) * 100
         threshold: '40'
