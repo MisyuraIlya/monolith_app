@@ -17,5 +17,5 @@ spec:
       metadata:
         serverAddress: http://prometheus:9090
         metricName: cpu_usage
-        query: sum(irate(process_cpu_seconds_total{app="app"}[2m])) * 100
+        query: irate(process_cpu_system_seconds_total{instance=~"app:3000"}[2m]) * 100
         threshold: '40'
