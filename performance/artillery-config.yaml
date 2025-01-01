@@ -1,9 +1,9 @@
 config:
-  target: "http://localhost:4000"
+  target: "http://app.local"
   phases:
-    - duration: 60
+    - duration: 300
       arrivalRate: 10
-      rampTo: 20
+      rampTo: 100
 scenarios:
   - name: "Test Fibonacci"
     flow:
