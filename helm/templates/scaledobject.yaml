@@ -10,6 +10,8 @@ spec:
   pollingInterval: 15
   scaleTargetRef:
     name: app
+    kind: Deployment
+    apiVersion: apps/v1
   triggers:
     - type: prometheus
       metadata:
