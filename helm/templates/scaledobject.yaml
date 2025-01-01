@@ -16,6 +16,6 @@ spec:
     - type: prometheus
       metadata:
         serverAddress: http://10.107.20.218:9090
-        metricName: cpu_usage
-        query: irate(process_cpu_system_seconds_total{instance=~"app:3000"}[2m]) * 100
-        threshold: '40'
+        metricName: cpu_usage_user
+        query: irate(process_cpu_user_seconds_total{instance=~"app:3000"}[2m]) * 100
+        threshold: '30'
