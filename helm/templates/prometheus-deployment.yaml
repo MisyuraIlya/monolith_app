@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus
+  namespace: monolith
 spec:
   replicas: 1
   selector:
@@ -21,8 +22,8 @@ spec:
             - containerPort: 9090
           volumeMounts:
             - name: config-volume
-              mountPath: /etc/prometheus
-              subPath: prometheus.yml
+              mountPath: /etc/prometheus/prometheus.yml
+              subPath: prometheus.yml  # Mount the file directly
       volumes:
         - name: config-volume
           configMap:
