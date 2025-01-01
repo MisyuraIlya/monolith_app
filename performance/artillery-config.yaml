@@ -1,11 +1,11 @@
 config:
-  target: "http://app.local"
+  target: "http://app.local" # Base URL of the app
   phases:
-    - duration: 300
-      arrivalRate: 10
-      rampTo: 100
+    - duration: 120          # Test duration in seconds
+      arrivalRate: 1        # Start with 10 requests per second
+      rampTo: 2            # Gradually increase to 100 requests per second
 scenarios:
-  - name: "Test Fibonacci"
+  - name: "Test Fibonacci"   # Scenario name
     flow:
       - get:
-          url: "/fibonacci"
+          url: "/fibonacci"  # The endpoint to test
