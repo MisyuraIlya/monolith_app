@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
 import { TokenPayload } from './token-payload.interface';
 import { Response } from 'express';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -59,7 +59,7 @@ export class AuthService {
 
     await this.usersService.update(
       { _id: user._id },
-      { $set: { refreshToken: await bcrypt.hash(refreshToken, 10) } },
+      { $set: { refreshToken: await bcryptjs.hash(refreshToken, 10) } },
     );
 
     response.cookie('Authentication', accessToken, {

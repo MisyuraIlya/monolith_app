@@ -17,11 +17,12 @@ export class ProductsResolver {
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
+    console.log(createProductInput)
     return this.productsService.create(createProductInput);
   }
 
   // Fetch all products with filters, pagination, and sorting
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   @Query(() => [Product], { name: 'products' })
   findAll(@Args() getProductsArgs: GetProductsArgs) {
     return this.productsService.findAll(getProductsArgs);

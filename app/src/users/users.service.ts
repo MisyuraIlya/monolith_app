@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
 import { FilterQuery, Model, UpdateQuery } from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -14,14 +14,14 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+      const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
       const user = new this.userModel({
         ...createUserDto,
         password: hashedPassword,
       });
       return await user.save();
     } catch (error) {
-      throw new InternalServerErrorException('Failed to create userr');
+      throw new InternalServerErrorException('Failed to create user');
     }
   }
 

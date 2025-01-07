@@ -55,7 +55,7 @@ services:
       - /app/node_modules  
     command: npm run start:dev 
     ports:
-      - '3000:3000' 
+      - '4000:3000' 
 
   prometheus:
     image: prom/prometheus
