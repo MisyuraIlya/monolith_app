@@ -1,12 +1,16 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
 import * as fibonacci from 'fibonacci';
+import { MockDataService } from './mock-data/mock-data.service';
 
 @Controller()
 export class AppController {
   private readonly logger = new Logger(AppController.name);
 
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly mockDataService: MockDataService
+  ) {}
 
   @Get()
   getHello(): string {
@@ -20,6 +24,12 @@ export class AppController {
       uptime: process.uptime(),
       timestamp: new Date().toISOString(),
     };
+  }
+
+  @Get('seed')
+  async seedDb() {
+    await this.mockDataService.seedAll(30, 50);
+    return 'Database seeded successfully!';
   }
 
 
