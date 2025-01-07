@@ -64,11 +64,11 @@ import { ElasticSearchModule } from './elastic-search/elastic-search.module';
     }),
 
     // GRAPHQL
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      autoSchemaFile: true,
-      driver: ApolloDriver,
-      context: ({ req }) => ({ req })
-    }),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   autoSchemaFile: true,
+    //   driver: ApolloDriver,
+    //   context: ({ req }) => ({ req })
+    // }),
 
     //PrometheusModule
     PrometheusModule.register(),
@@ -83,18 +83,18 @@ import { ElasticSearchModule } from './elastic-search/elastic-search.module';
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ThrottlerGuard,
-    // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: CacheInterceptor,
-    // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: LoggingInterceptor,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule {}
