@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,11 +13,16 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    return new this.userModel({
-      ...createUserDto,
-      password: hashedPassword,
-    }).save();
+    try {
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+      const user = new this.userModel({
+        ...createUserDto,
+        password: hashedPassword,
+      });
+      return await user.save();
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to create userr');
+    }
   }
 
   async findAll() {

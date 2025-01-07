@@ -2,9 +2,11 @@ version: '3.8'
 
 services:
   mongo:
-    image: mongo
+    image: mongo:latest
     ports:
-      - '27017:27017'
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
 
   redis:
     image: redis
@@ -32,8 +34,8 @@ services:
       - MONGODB_URI=mongodb://mongo:27017/monolith-app
       - REDIS_URI=redis
       - REDIS_PORT=6379
-      - JWT_ACCESS_TOKEN_SECRET=access$
-      - JWT_REFRESH_TOKEN_SECRET=refresh$
+      - JWT_ACCESS_TOKEN_SECRET=accesssecret
+      - JWT_REFRESH_TOKEN_SECRET=refreshsecret
       - THROTTLE_TTL=60
       - THROTTLE_LIMIT=30
       - MINIO_ENDPOINT=http://minio:9000
@@ -53,7 +55,7 @@ services:
       - /app/node_modules  
     command: npm run start:dev 
     ports:
-      - '4000:3000' 
+      - '3000:3000' 
 
   prometheus:
     image: prom/prometheus

@@ -73,6 +73,7 @@ export class AuthService {
       secure: this.configService.get('NODE_ENV') === 'production',
       expires: expiresRefreshToken,
     });
+    console.log('responsee',response)
   }
 
   async verifyUser(email: string, password: string) {
