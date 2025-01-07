@@ -19,6 +19,7 @@ import { ProductsModule } from './products/products.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggingInterceptor } from './logging.interceptor';
 import { UploadModule } from './upload/upload.module';
+import { ElasticSearchModule } from './elastic-search/elastic-search.module';
 @Module({
   imports: [
     // ENV
@@ -77,6 +78,7 @@ import { UploadModule } from './upload/upload.module';
     AuthModule,
     ProductsModule,
     UploadModule,
+    ElasticSearchModule,
   ],
   controllers: [AppController],
   providers: [

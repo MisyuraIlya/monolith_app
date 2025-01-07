@@ -24,6 +24,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
   await app.listen(PORT);
-  console.log(`Server started on http://localhost:${PORT}`);
+  console.log(`Server started on http://localhost:${PORT}!`);
 }
 bootstrap();

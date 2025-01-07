@@ -40,10 +40,14 @@ services:
       - MINIO_ACCESS_KEY=admin
       - MINIO_SECRET_KEY=password123
       - MINIO_BUCKET=uploads
+      - ELASTICSEARCH_URI=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=muY22hRSWxG1MbDlptrj
     depends_on:
       - mongo
       - redis
       - minio
+      - elasticsearch  
     volumes:
       - ./app:/app  
       - /app/node_modules  
@@ -70,5 +74,17 @@ services:
     depends_on:
       - prometheus
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.0  
+    environment:
+      - discovery.type=single-node  
+      - ELASTICSEARCH_USERNAME=admin  
+      - ELASTICSEARCH_PASSWORD=123456  
+    ports:
+      - '9200:9200' 
+    volumes:
+      - esdata:/usr/share/elasticsearch/data  
+
 volumes:
   minio-data:
+  esdata:  
