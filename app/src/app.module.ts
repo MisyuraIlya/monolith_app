@@ -20,6 +20,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggingInterceptor } from './logging.interceptor';
 import { UploadModule } from './upload/upload.module';
 import { ElasticSearchModule } from './elastic-search/elastic-search.module';
+import { MockDataService } from './mock-data/mock-data.service';
 @Module({
   imports: [
     // ENV
@@ -95,6 +96,7 @@ import { ElasticSearchModule } from './elastic-search/elastic-search.module';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
+    MockDataService,
   ],
 })
 export class AppModule {}
