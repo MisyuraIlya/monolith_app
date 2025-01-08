@@ -12,12 +12,13 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto,tenantId?: string) {
     try {
       const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
       const user = new this.userModel({
         ...createUserDto,
         password: hashedPassword,
+        tenantId:tenantId,
       });
       return await user.save();
     } catch (error) {

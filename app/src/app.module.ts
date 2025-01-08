@@ -24,6 +24,9 @@ import { MockDataService } from './mock-data/mock-data.service';
 import { MockDataModule } from './mock-data/mock-data.module';
 import { ChatModule } from './chat/chat.module';
 import { MailSmsModule } from './mail-sms/mail-sms.module';
+import { TenantsModule } from './tenants/tenants.module';
+import { BooksModule } from './books/books.module';
+
 @Module({
   imports: [
     // ENV
@@ -86,6 +89,8 @@ import { MailSmsModule } from './mail-sms/mail-sms.module';
     MockDataModule,
     ChatModule,
     MailSmsModule,
+    TenantsModule,
+    BooksModule,
   ],
   controllers: [AppController],
   providers: [

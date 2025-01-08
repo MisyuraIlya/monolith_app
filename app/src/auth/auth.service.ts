@@ -9,6 +9,7 @@ import { User } from 'src/users/entities/user.entity';
 import { TokenPayload } from './token-payload.interface';
 import { Response } from 'express';
 import * as bcryptjs from 'bcryptjs';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class AuthService {
@@ -103,4 +104,27 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token is not valid.');
     }
   }
+
+
+  // FOR MULTI-TENANCY
+  async createSecretKeyForNewTenant(tenantId: string) {
+    // Generate a 256-bit random secret key
+    const secretKey = nanoid(128);
+
+    await this.usersService.update(
+      { _id: tenantId },
+      { $set: { tenantSecretKey: secretKey } },
+    );
+
+    return secretKey;
+  }
+
+  async verifyUserTenant(userId: string, tenantId: string) {
+    const user = await this.usersService.findOne({ _id: userId, tenantId });
+    if (!user) {
+      throw new UnauthorizedException('Tenant validation failed.');
+    }
+    return user;
+  }
+
 }

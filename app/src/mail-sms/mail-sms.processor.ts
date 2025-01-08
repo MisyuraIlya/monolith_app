@@ -15,7 +15,7 @@ export class MailSmsProcessor {
     },
   });
 
-  private readonly twilioClient = new Twilio('your-account-sid', 'your-auth-token');
+  // private readonly twilioClient = new Twilio('your-account-sid', 'your-auth-token');
 
   @Process('send-email')
   async handleSendEmail(job: Job<{ to: string; subject: string; text: string; html?: string }>) {
@@ -39,15 +39,15 @@ export class MailSmsProcessor {
   async handleSendSms(job: Job<{ to: string; message: string }>) {
     const { to, message } = job.data;
 
-    try {
-      const sms = await this.twilioClient.messages.create({
-        body: message,
-        from: '+1234567890', // Your Twilio number
-        to,
-      });
-      console.log(`SMS sent: ${sms.sid}`);
-    } catch (error) {
-      console.error(`Failed to send SMS: ${error.message}`);
-    }
+    // try {
+    //   const sms = await this.twilioClient.messages.create({
+    //     body: message,
+    //     from: '+1234567890', // Your Twilio number
+    //     to,
+    //   });
+    //   console.log(`SMS sent: ${sms.sid}`);
+    // } catch (error) {
+    //   console.error(`Failed to send SMS: ${error.message}`);
+    // }
   }
 }
