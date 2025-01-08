@@ -14,5 +14,6 @@ import { Product, ProductSchema } from './entities/product.entity';
     ]),
   ],
   providers: [ProductsResolver, ProductsService],
+  exports: [ProductsService,MongooseModule],
 })
 export class ProductsModule {}

@@ -40,7 +40,6 @@ export class MockDataService {
       sku: faker.string.uuid(),
       isPublished: faker.datatype.boolean(),
     }));
-
     for (const product of products) {
       const existingProduct = await this.productModel.findOne({ sku: product.sku });
       if (!existingProduct) {
@@ -52,7 +51,7 @@ export class MockDataService {
   }
 
   async seedAll(usersCount: number, productsCount: number): Promise<void> {
-    await this.seedUsers(usersCount);
+    // await this.seedUsers(usersCount);
     await this.seedProducts(productsCount);
   }
 }

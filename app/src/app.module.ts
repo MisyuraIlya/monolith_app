@@ -21,6 +21,7 @@ import { LoggingInterceptor } from './logging.interceptor';
 import { UploadModule } from './upload/upload.module';
 import { ElasticSearchModule } from './elastic-search/elastic-search.module';
 import { MockDataService } from './mock-data/mock-data.service';
+import { MockDataModule } from './mock-data/mock-data.module';
 @Module({
   imports: [
     // ENV
@@ -80,6 +81,7 @@ import { MockDataService } from './mock-data/mock-data.service';
     ProductsModule,
     UploadModule,
     ElasticSearchModule,
+    MockDataModule,
   ],
   controllers: [AppController],
   providers: [
