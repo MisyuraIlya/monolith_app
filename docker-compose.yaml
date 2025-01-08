@@ -51,8 +51,8 @@ services:
       - minio
       - elasticsearch  
     volumes:
-      - ./app:/app  
-      - /app/node_modules  
+      - ./app:/app:delegated
+      - /app/node_modules
     command: npm run start:dev 
     ports:
       - '4000:3000' 

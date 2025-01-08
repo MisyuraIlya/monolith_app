@@ -23,7 +23,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
+  // Start server
   await app.listen(PORT);
-  console.log(`Server started on http://localhost:${PORT}!`);
+  console.log(`HTTP server started on http://localhost:${PORT}`);
+  console.log(`WebSocket server listening on ws://localhost:${PORT}`);
 }
 bootstrap();

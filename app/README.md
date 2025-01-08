@@ -64,3 +64,9 @@ npm i aws-sdk
 Copy and paste this markdown block into your **README.md** file to guide developers in setting up required dependencies.
 
 CANT USE GRAPHQL WITH CacheModule AND ThrottlerGuard
+
+## 🚀 WEBSOCKETS
+```bash
+npm install @nestjs/websockets @nestjs/platform-socket.io socket.io
+```
+```

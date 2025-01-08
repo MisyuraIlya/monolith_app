@@ -22,6 +22,7 @@ import { UploadModule } from './upload/upload.module';
 import { ElasticSearchModule } from './elastic-search/elastic-search.module';
 import { MockDataService } from './mock-data/mock-data.service';
 import { MockDataModule } from './mock-data/mock-data.module';
+import { ChatModule } from './chat/chat.module';
 @Module({
   imports: [
     // ENV
@@ -82,22 +83,23 @@ import { MockDataModule } from './mock-data/mock-data.module';
     UploadModule,
     ElasticSearchModule,
     MockDataModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CacheInterceptor,
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: LoggingInterceptor,
+    // },
     MockDataService,
   ],
 })
