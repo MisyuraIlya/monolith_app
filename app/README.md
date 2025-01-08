@@ -70,3 +70,11 @@ CANT USE GRAPHQL WITH CacheModule AND ThrottlerGuard
 npm install @nestjs/websockets @nestjs/platform-socket.io socket.io
 ```
 ```
+
+## 🚀 BULL (SMS + MAIL)
+```bash
+npm install --save @nestjs/bull bull bullmq nodemailer @nestjs-modules/mailer twilio
+npm install --save-dev @types/bull
+
+```
+```

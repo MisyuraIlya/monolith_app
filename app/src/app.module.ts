@@ -23,6 +23,7 @@ import { ElasticSearchModule } from './elastic-search/elastic-search.module';
 import { MockDataService } from './mock-data/mock-data.service';
 import { MockDataModule } from './mock-data/mock-data.module';
 import { ChatModule } from './chat/chat.module';
+import { MailSmsModule } from './mail-sms/mail-sms.module';
 @Module({
   imports: [
     // ENV
@@ -84,6 +85,7 @@ import { ChatModule } from './chat/chat.module';
     ElasticSearchModule,
     MockDataModule,
     ChatModule,
+    MailSmsModule,
   ],
   controllers: [AppController],
   providers: [
