@@ -7,11 +7,13 @@ import { UsersModule } from 'src/users/users.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { TenantConnectionService } from 'src/services/tenant-connection.service';
+import { TenantStrategy } from './strategies/tenant.strategy';
 
 @Module({
   imports: [UsersModule, PassportModule, JwtModule],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy, TenantStrategy ,TenantConnectionService],
   exports: [AuthService]
 })
 export class AuthModule {}

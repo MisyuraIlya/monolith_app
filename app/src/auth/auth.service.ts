@@ -10,6 +10,11 @@ import { TokenPayload } from './token-payload.interface';
 import { Response } from 'express';
 import * as bcryptjs from 'bcryptjs';
 import { nanoid } from 'nanoid';
+import { TenantConnectionService } from 'src/services/tenant-connection.service';
+import { Secrets, SecretsSchema } from './entities/secrets.entity';
+import { jwt } from 'twilio';
+import { decrypt } from 'src/utils/decrypt';
+import { encrypt } from 'src/utils/encrypt';
 
 @Injectable()
 export class AuthService {
@@ -17,10 +22,13 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    private readonly tenantConnectionService: TenantConnectionService,
   ) {}
 
   async login(user: User, response: Response) {
+
     const expiresAccessToken = new Date();
+
     expiresAccessToken.setMilliseconds(
       expiresAccessToken.getTime() +
         parseInt(
@@ -40,8 +48,11 @@ export class AuthService {
         ),
     );
 
+    const secretKey = await this.fetchAccessTokenSecretSigningKey(user.tenantId);
+
     const tokenPayload: TokenPayload = {
       userId: user._id.toHexString(),
+      tenantSecret: secretKey
     };
 
     const accessToken = this.jwtService.sign(tokenPayload, {
@@ -74,7 +85,6 @@ export class AuthService {
       secure: this.configService.get('NODE_ENV') === 'production',
       expires: expiresRefreshToken,
     });
-    console.log('responsee',response)
   }
 
   async verifyUser(email: string, password: string) {
@@ -108,23 +118,48 @@ export class AuthService {
 
   // FOR MULTI-TENANCY
   async createSecretKeyForNewTenant(tenantId: string) {
-    // Generate a 256-bit random secret key
-    const secretKey = nanoid(128);
+    //Generate Random Secret Key
+    const jwtSecret = nanoid(128);
 
-    await this.usersService.update(
-      { _id: tenantId },
-      { $set: { tenantSecretKey: secretKey } },
+    //Encrypt the Secret Key
+    const encryptedSecret = encrypt(
+      jwtSecret,
+      this.configService.get(`JWT_ACCESS_TOKEN_SECRET`),
     );
 
-    return secretKey;
+    //Get Access to the tenant specific Model
+    const SecretsModel = await this.tenantConnectionService.getTenantModel(
+      {
+        name: Secrets.name,
+        schema: SecretsSchema,
+      },
+      tenantId,
+    );
+
+    //Store the encrypted secret key
+    await SecretsModel.create({ jwtSecret: encryptedSecret });
   }
 
-  async verifyUserTenant(userId: string, tenantId: string) {
-    const user = await this.usersService.findOne({ _id: userId, tenantId });
-    if (!user) {
-      throw new UnauthorizedException('Tenant validation failed.');
+  async fetchAccessTokenSecretSigningKey(tenantId: string) {
+    const SecretsModel = await this.tenantConnectionService.getTenantModel(
+      { name: Secrets.name, schema: SecretsSchema },
+      tenantId,
+    );
+  
+    const secretsDoc = await SecretsModel.findOne();
+    if (!secretsDoc) {
+      throw new UnauthorizedException('No secret found for this tenant.');
     }
-    return user;
+  
+    return decrypt(secretsDoc.jwtSecret, this.configService.get(`JWT_ACCESS_TOKEN_SECRET`));
+  }
+
+  async verifyUserTenant(userId: string, tenantSecret: string) {
+    // const user = await this.usersService.findOne({ _id: userId, tenantId });
+    // if (!user) {
+    //   throw new UnauthorizedException('Tenant validation failed.');
+    // }
+    // return user;
   }
 
 }

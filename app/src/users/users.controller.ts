@@ -12,6 +12,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { TenantAuthGuard } from 'src/auth/guards/tenant-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -23,7 +24,8 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
+  @UseGuards(TenantAuthGuard)
   findAll() {
     return this.usersService.findAll();
   }

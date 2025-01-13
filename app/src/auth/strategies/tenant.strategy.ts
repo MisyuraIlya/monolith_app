@@ -5,16 +5,15 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../auth.service';
 import { TokenPayload } from '../token-payload.interface';
 import { Request } from 'express';
+import { UsersService } from 'src/users/users.service';
 
-export interface TenantTokenPayload extends TokenPayload {
-  tenantId: string;
-}
 
 @Injectable()
 export class TenantStrategy extends PassportStrategy(Strategy, 'tenant') {
   constructor(
     configService: ConfigService,
     private readonly authService: AuthService,
+    private readonly usersService: UsersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -24,10 +23,16 @@ export class TenantStrategy extends PassportStrategy(Strategy, 'tenant') {
     });
   }
 
-  async validate(payload: TenantTokenPayload) {
-    const user = await this.authService.verifyUserTenant(payload.userId, payload.tenantId);
+  async validate(payload: TokenPayload) {
+    const { userId, tenantSecret } = payload;
+    console.log('tenantSecret',tenantSecret)
+    const user = await this.usersService.findOne({ _id: userId });
     if (!user) {
-      throw new UnauthorizedException('Invalid tenant or user.');
+      throw new UnauthorizedException('User not found');
+    }
+    const secretKey = await this.authService.fetchAccessTokenSecretSigningKey(user.tenantId);
+    if (secretKey !== tenantSecret) {
+      throw new UnauthorizedException('Invalid tenant secret');
     }
     return user;
   }

@@ -21,22 +21,14 @@ export class TenantsService {
   }
 
   async createCompany(dto: CreateTenantDto) {
-    //Verify user does not already exist
     const user = await this.usersService.findOne({email: dto.user.email});
     if (user) {
       throw new BadRequestException('User exists and belongs to a company...');
     }
-    console.log('dto',dto)
-    //Create a tenant Id
     const tenantId = nanoid(12);
     console.log('tenantId',tenantId)
-    //Create a tenant secret
     await this.authService.createSecretKeyForNewTenant(tenantId);
-    console.log('tenantId2',tenantId)
-    //Create new user
     await this.usersService.create(dto.user, tenantId);
-
-    //Create Tenant Record
     return this.TenantModel.create({
       companyName: dto.companyName,
       tenantId,

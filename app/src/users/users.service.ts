@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -22,7 +22,7 @@ export class UsersService {
       });
       return await user.save();
     } catch (error) {
-      throw new InternalServerErrorException('Failed to create user');
+      throw new BadRequestException(`Failed to create user: ${error}`);
     }
   }
 
@@ -31,7 +31,7 @@ export class UsersService {
   }
 
   async findOne(query: FilterQuery<User>) {
-    const user = (await this.userModel.findOne(query)).toObject();
+    const user = (await this.userModel.findOne(query));
     if (!user) {
       throw new NotFoundException('user not found');
     }
