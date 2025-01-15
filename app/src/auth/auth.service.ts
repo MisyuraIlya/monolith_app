@@ -155,11 +155,18 @@ export class AuthService {
   }
 
   async verifyUserTenant(userId: string, tenantSecret: string) {
-    // const user = await this.usersService.findOne({ _id: userId, tenantId });
-    // if (!user) {
-    //   throw new UnauthorizedException('Tenant validation failed.');
-    // }
-    // return user;
+    const user = await this.usersService.findOne({ _id: userId });
+    if (!user) {
+      throw new UnauthorizedException('User not found.');
+    }
+  
+    // Fetch the tenant's secret key
+    const storedTenantSecret = await this.fetchAccessTokenSecretSigningKey(user.tenantId);
+    if (storedTenantSecret !== tenantSecret) {
+      throw new UnauthorizedException('Invalid tenant secret.');
+    }
+  
+    return user; // Return user if validation passes
   }
 
 }

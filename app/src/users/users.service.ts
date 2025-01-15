@@ -30,11 +30,16 @@ export class UsersService {
     return this.userModel.find({});
   }
 
-  async findOne(query: FilterQuery<User>) {
+  async findOneAndThrowIfNull(query: FilterQuery<User>) {
     const user = (await this.userModel.findOne(query));
     if (!user) {
       throw new NotFoundException('user not found');
     }
+    return user;
+  }
+
+  async findOne(query: FilterQuery<User>) {
+    const user = (await this.userModel.findOne(query));
     return user;
   }
 

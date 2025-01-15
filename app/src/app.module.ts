@@ -26,6 +26,7 @@ import { ChatModule } from './chat/chat.module';
 import { MailSmsModule } from './mail-sms/mail-sms.module';
 import { TenantsModule } from './tenants/tenants.module';
 import { BooksModule } from './books/books.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -38,6 +39,10 @@ import { BooksModule } from './books/books.module';
         uri: configService.getOrThrow('MONGODB_URI'),
       }),
       inject: [ConfigService],
+    }),
+
+    JwtModule.register({
+      global: true,
     }),
 
     // CACHE

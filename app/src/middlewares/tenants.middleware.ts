@@ -1,36 +1,42 @@
 import {
-    Injectable,
-    NestMiddleware,
-    BadRequestException,
-    NotFoundException,
-    UnauthorizedException,
-  } from '@nestjs/common';
-  import { Request, Response, NextFunction } from 'express';
+  Injectable,
+  NestMiddleware,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
 import { AuthService } from 'src/auth/auth.service';
-  import { TenantsService } from 'src/tenants/tenants.service';
-  
-  @Injectable()
-  export class TenantsMiddleware implements NestMiddleware {
-    constructor(private readonly authService: AuthService) {}
-  
-    async use(req: Request, res: Response, next: NextFunction) {
-      // console.log('req',req.cookies)
-      const tenantSecret = req.cookies?.tenantSecret;
-      // console.log('tenantSecret',tenantSecret)
-      if (!tenantSecret) {
-        throw new UnauthorizedException('Tenant secret is missing in cookies.');
+import { JwtService } from '@nestjs/jwt';
+
+@Injectable()
+export class TenantsMiddleware implements NestMiddleware {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async use(req: Request, res: Response, next: NextFunction) {
+    try {
+      const authenticationToken = req.cookies?.Authentication;
+      if (!authenticationToken) {
+        throw new UnauthorizedException('Authentication token is missing.');
       }
-  
-      // Validate the tenant secret and fetch the user
-      // const user = await this.authService.verifyTenantSecret(tenantSecret);
-  
-      // if (!user || !user.tenantId) {
-      //   throw new UnauthorizedException('Invalid tenant secret or tenant not found.');
-      // }
-  
-      // Attach the tenantId to the request object
-      req['tenantId'] = 123;
-  
+
+      const payload = this.jwtService.verify(authenticationToken, {
+        secret: process.env.JWT_ACCESS_TOKEN_SECRET, 
+      });
+
+      const { userId, tenantSecret } = payload;
+      if (!userId || !tenantSecret) {
+        throw new UnauthorizedException('Invalid token payload.');
+      }
+
+      const user = await this.authService.verifyUserTenant(userId, tenantSecret);
+      req['tenantId'] = user.tenantId;
+
       next();
+    } catch (err) {
+      console.error('Tenant validation error:', err.message);
+      throw new UnauthorizedException('Failed to validate tenant.');
     }
   }
+}
