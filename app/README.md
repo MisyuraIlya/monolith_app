@@ -122,5 +122,4 @@ Implement multi-tenancy in your application:
 
 ---
 
-### How to Use:
-Copy and paste this markdown block into your **README.md** file to guide developers in setting up required dependencies for your **NestJS** project.
+
