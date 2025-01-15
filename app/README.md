@@ -101,10 +101,11 @@ npm install @nestjs/elasticsearch @elastic/elasticsearch
 ---
 
 ## 🔍 Logging with windston
-Integrate ElasticSearch into your project:
+Logging and Monitoring with winston - Loki - grafanna :
 
 ```bash
 npm i nest-winston
+npm i winston-loki
 ```
 
 ---
