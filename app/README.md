@@ -100,6 +100,15 @@ npm install @nestjs/elasticsearch @elastic/elasticsearch
 
 ---
 
+## 🔍 Logging with windston
+Integrate ElasticSearch into your project:
+
+```bash
+npm i nest-winston
+```
+
+---
+
 ## 🏢 Multi-Tenancy
 Implement multi-tenancy in your application:
 

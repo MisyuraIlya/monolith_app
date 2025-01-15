@@ -27,6 +27,9 @@ import { MailSmsModule } from './mail-sms/mail-sms.module';
 import { TenantsModule } from './tenants/tenants.module';
 import { BooksModule } from './books/books.module';
 import { JwtModule } from '@nestjs/jwt';
+import { WinstonModule, utilities as nestWinstonModuleUtilities } from 'nest-winston';
+import * as winston from 'winston';
+const LokiTransport = require('winston-loki');
 
 @Module({
   imports: [
@@ -41,8 +44,35 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
     }),
 
+    // FOR MULTITENANCY JWT MIDDLAWARE CHECK
     JwtModule.register({
       global: true,
+    }),
+
+    // LOGGING WINSTON
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.ms(),
+            nestWinstonModuleUtilities.format.nestLike('app', {
+              colors: true,
+              prettyPrint: true,
+            })
+          ),
+        }),
+        new LokiTransport({
+          host: 'http://loki:3100',
+          labels: { service: 'app-service' },
+          json: true,
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json()
+          ),
+          level: 'debug',
+        }),
+      ],
     }),
 
     // CACHE
